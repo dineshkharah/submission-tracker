@@ -148,6 +148,10 @@ The Drive links in the sample data are made up, so opening one lands on a Google
 
 Everything lives in one browser. Two people on two machines do not see each other's data, and clearing site data resets the app.
 
+The submission modal does not trap focus. Opening it does not move focus inside, closing it does not put focus back where it was, and tabbing walks out into the page behind. Doing this properly needs a focus trap, and a half built one is worse than none, so it is named here instead.
+
+Nothing versions the saved data. If the shape of what goes into localStorage ever changed and the app were redeployed, anyone who had used the older version would be handed data in the old shape with no way out but clearing site data. A version number checked on load, falling back to the seed when it does not match, would fix it.
+
 There are no tests. The selectors are pure functions and were checked with throwaway scripts while building, but nothing is committed that would catch a regression.
 
 ## What I would do with more time
@@ -160,6 +164,8 @@ Let a professor reopen a submission, since a student who confirms by mistake cur
 
 Add tests around `selectors.js` first, because it holds the isolation rules and it is pure, so it is both the most important and the easiest thing to cover.
 
-Add sorting and filtering on the professor's view, which matters as soon as there are more than a handful of assignments.
+Add sorting and filtering on the professor's view, which matters as soon as there are more than a handful of assignments. Sorting a student's own list so unfinished work comes first would help too, since right now it is ordered by due date and the finished ones sit at the top.
+
+Give the modal a proper focus trap, and show an overdue date differently from one still to come, which is the clearest missing signal on the student's screen.
 
 Handle a file upload directly instead of pointing at a Drive folder, which would remove the need for the whole double verification flow, since the app could then see the work itself.
