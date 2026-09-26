@@ -19,7 +19,9 @@ export default function AssignmentCard({ assignment, onMarkSubmitted }) {
         <StatusPill status={submission.status} />
       </div>
 
-      <p className="mt-2 text-sm wrap-break-word text-slate-500">{assignment.description}</p>
+      {assignment.description === '' ? null : (
+        <p className="mt-2 text-sm wrap-break-word text-slate-500">{assignment.description}</p>
+      )}
 
       <p className="mt-3 text-xs text-slate-500">Due {formatDueDate(assignment.dueDate)}</p>
 

@@ -29,7 +29,14 @@ export default function AssignmentAdminCard({ assignment, rows, progress }) {
         <p className="shrink-0 text-lg font-semibold text-slate-900">{progress.percent}%</p>
       </div>
 
-      <p className="mt-2 text-sm wrap-break-word text-slate-500">{assignment.description}</p>
+      {/*
+        The description is optional on the create form, so an assignment can
+        arrive without one. Rendering the paragraph anyway would leave an empty
+        gap in the card.
+      */}
+      {assignment.description === '' ? null : (
+        <p className="mt-2 text-sm wrap-break-word text-slate-500">{assignment.description}</p>
+      )}
 
       <p className="mt-4 text-xs text-slate-500">
         {progress.submitted} of {progress.total} students submitted
