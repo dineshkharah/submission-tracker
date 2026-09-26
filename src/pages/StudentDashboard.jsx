@@ -22,8 +22,8 @@ export default function StudentDashboard() {
   const assignments = getAssignmentsForStudent(data, currentUser.id)
   const progress = getStudentProgress(data, currentUser.id)
 
-  function handleConfirm() {
-    data.markSubmitted(chosenAssignment.id, currentUser.id)
+  function handleConfirm(submissionLink) {
+    data.markSubmitted(chosenAssignment.id, currentUser.id, submissionLink)
     setChosenAssignment(null)
   }
 

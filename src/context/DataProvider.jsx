@@ -26,7 +26,7 @@ export function DataProvider({ children }) {
     save(STORAGE_KEYS.data, data)
   }, [data])
 
-  function markSubmitted(assignmentId, studentId) {
+  function markSubmitted(assignmentId, studentId, submissionLink) {
     setData((current) => ({
       ...current,
       submissions: current.submissions.map((submission) => {
@@ -37,7 +37,12 @@ export function DataProvider({ children }) {
           return submission
         }
 
-        return { ...submission, status: 'submitted', submittedAt: new Date().toISOString() }
+        return {
+          ...submission,
+          status: 'submitted',
+          submittedAt: new Date().toISOString(),
+          submissionLink,
+        }
       }),
     }))
   }
@@ -70,6 +75,7 @@ export function DataProvider({ children }) {
         studentId: student.id,
         status: 'not_submitted',
         submittedAt: null,
+        submissionLink: null,
       }))
 
       return {
