@@ -18,9 +18,14 @@ export default function StudentStatusList({ rows }) {
 
             <div className="min-w-0">
               <p className="truncate text-sm font-medium text-slate-900">{row.student.name}</p>
+              {/*
+                Just the date, with no "Submitted on" in front of it. The pill
+                next to it already says the status, and the longer wording was
+                wide enough to get cut off on a phone.
+              */}
               <p className="truncate text-xs text-slate-500">
                 {row.status === 'submitted'
-                  ? `Submitted on ${formatSubmittedAt(row.submittedAt)}`
+                  ? formatSubmittedAt(row.submittedAt)
                   : 'Nothing handed in yet'}
               </p>
             </div>

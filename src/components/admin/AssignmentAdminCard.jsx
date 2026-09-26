@@ -15,14 +15,21 @@ export default function AssignmentAdminCard({ assignment, rows, progress }) {
     <article className="rounded-xl border border-slate-200 bg-white p-4 sm:p-5">
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
-          <h3 className="text-sm font-semibold text-slate-900 sm:text-base">{assignment.title}</h3>
+          {/*
+            wrap-break-word matters because a title is typed by a professor and
+            nothing stops them entering one very long word, which would push
+            the card wider than the screen.
+          */}
+          <h3 className="text-sm font-semibold wrap-break-word text-slate-900 sm:text-base">
+            {assignment.title}
+          </h3>
           <p className="mt-1 text-xs text-slate-500">Due {formatDueDate(assignment.dueDate)}</p>
         </div>
 
         <p className="shrink-0 text-lg font-semibold text-slate-900">{progress.percent}%</p>
       </div>
 
-      <p className="mt-2 text-sm text-slate-500">{assignment.description}</p>
+      <p className="mt-2 text-sm wrap-break-word text-slate-500">{assignment.description}</p>
 
       <p className="mt-4 text-xs text-slate-500">
         {progress.submitted} of {progress.total} students submitted

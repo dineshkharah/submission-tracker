@@ -13,13 +13,13 @@ export default function AssignmentCard({ assignment, onMarkSubmitted }) {
   return (
     <article className="flex flex-col rounded-xl border border-slate-200 bg-white p-4 sm:p-5">
       <div className="flex items-start justify-between gap-3">
-        <h3 className="min-w-0 text-sm font-semibold text-slate-900 sm:text-base">
+        <h3 className="min-w-0 text-sm font-semibold wrap-break-word text-slate-900 sm:text-base">
           {assignment.title}
         </h3>
         <StatusPill status={submission.status} />
       </div>
 
-      <p className="mt-2 text-sm text-slate-500">{assignment.description}</p>
+      <p className="mt-2 text-sm wrap-break-word text-slate-500">{assignment.description}</p>
 
       <p className="mt-3 text-xs text-slate-500">Due {formatDueDate(assignment.dueDate)}</p>
 
