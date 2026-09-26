@@ -61,7 +61,7 @@ export default function AssignmentAdminCard({ assignment, rows, progress }) {
           onClick={() => setIsListOpen(!isListOpen)}
           className="rounded-lg border border-slate-200 px-3 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50"
         >
-          {isListOpen ? 'Hide students' : `Show all ${progress.total} students`}
+          {isListOpen ? 'Hide students' : 'Show all students'}
         </button>
       </div>
 
