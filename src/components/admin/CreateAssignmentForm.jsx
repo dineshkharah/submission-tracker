@@ -1,28 +1,10 @@
 import { useState } from 'react'
 import { todayAsText } from '../../utils/format'
-
-const LABEL = 'block text-xs font-medium text-slate-700'
-const INPUT =
-  'mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:border-accent-500 focus:ring-2 focus:ring-accent-200 focus:outline-none'
-const ERROR = 'mt-1 text-xs text-amber-700'
+import { isWebLink } from '../../utils/validate'
+import TextField from '../common/TextField'
 
 const TITLE_LIMIT = 120
 const DESCRIPTION_LIMIT = 500
-
-/*
-  Checks the value really is a web link. Reading it with the URL parser rather
-  than looking at the start of the string means "httpfoo" and a bare "https://"
-  are both rejected, which startsWith could not tell apart from a real link.
-*/
-function isWebLink(value) {
-  try {
-    const url = new URL(value)
-
-    return url.protocol === 'http:' || url.protocol === 'https:'
-  } catch {
-    return false
-  }
-}
 
 /*
   Five pieces of state, one per field plus one object of error messages. No
@@ -98,83 +80,61 @@ export default function CreateAssignmentForm({ onCreate }) {
 
   return (
     <form onSubmit={handleSubmit} noValidate className="space-y-4">
-      <div>
-        <label htmlFor="assignment-title" className={LABEL}>
-          Title
-        </label>
-        <input
-          id="assignment-title"
-          type="text"
-          value={title}
-          maxLength={TITLE_LIMIT}
-          placeholder="Operating Systems Case Study"
-          onChange={(event) => {
-            setTitle(event.target.value)
-            clearError('title')
-          }}
-          className={INPUT}
-        />
-        {errors.title === undefined ? null : <p className={ERROR}>{errors.title}</p>}
-      </div>
+      <TextField
+        id="assignment-title"
+        label="Title"
+        value={title}
+        error={errors.title}
+        maxLength={TITLE_LIMIT}
+        placeholder="Operating Systems Case Study"
+        onChange={(event) => {
+          setTitle(event.target.value)
+          clearError('title')
+        }}
+      />
 
-      <div>
-        <label htmlFor="assignment-drive-link" className={LABEL}>
-          Drive folder link
-        </label>
-        <input
-          id="assignment-drive-link"
-          type="url"
-          value={driveLink}
-          placeholder="https://drive.google.com/drive/folders/..."
-          onChange={(event) => {
-            setDriveLink(event.target.value)
-            clearError('driveLink')
-          }}
-          className={INPUT}
-        />
-        {errors.driveLink === undefined ? null : <p className={ERROR}>{errors.driveLink}</p>}
-      </div>
+      <TextField
+        id="assignment-drive-link"
+        label="Drive folder link"
+        type="url"
+        value={driveLink}
+        error={errors.driveLink}
+        placeholder="https://drive.google.com/drive/folders/..."
+        onChange={(event) => {
+          setDriveLink(event.target.value)
+          clearError('driveLink')
+        }}
+      />
 
-      <div>
-        <label htmlFor="assignment-due-date" className={LABEL}>
-          Due date
-        </label>
-        {/*
-          min stops the date picker offering a past day at all. The check in
-          findErrors still has to exist, because min is only a hint and a typed
-          date goes straight past it.
-        */}
-        <input
-          id="assignment-due-date"
-          type="date"
-          value={dueDate}
-          min={today}
-          onChange={(event) => {
-            setDueDate(event.target.value)
-            clearError('dueDate')
-          }}
-          className={INPUT}
-        />
-        {errors.dueDate === undefined ? null : <p className={ERROR}>{errors.dueDate}</p>}
-      </div>
+      {/*
+        min stops the date picker offering a past day at all. The check in
+        findErrors still has to exist, because min is only a hint and a typed
+        date goes straight past it.
+      */}
+      <TextField
+        id="assignment-due-date"
+        label="Due date"
+        type="date"
+        value={dueDate}
+        error={errors.dueDate}
+        min={today}
+        onChange={(event) => {
+          setDueDate(event.target.value)
+          clearError('dueDate')
+        }}
+      />
 
-      <div>
-        <label htmlFor="assignment-description" className={LABEL}>
-          Description
-        </label>
-        <textarea
-          id="assignment-description"
-          rows={3}
-          value={description}
-          maxLength={DESCRIPTION_LIMIT}
-          placeholder="What should students hand in?"
-          onChange={(event) => setDescription(event.target.value)}
-          className={INPUT}
-        />
-        <p className="mt-1 text-xs text-slate-400">
-          Optional. {DESCRIPTION_LIMIT - description.length} characters left.
-        </p>
-      </div>
+      <TextField
+        id="assignment-description"
+        label="Description"
+        multiline
+        rows={3}
+        value={description}
+        maxLength={DESCRIPTION_LIMIT}
+        placeholder="What should students hand in?"
+        hint={`Optional. ${DESCRIPTION_LIMIT - description.length} characters left.`}
+        onChange={(event) => setDescription(event.target.value)}
+      />
 
       <div className="flex justify-end">
         <button
