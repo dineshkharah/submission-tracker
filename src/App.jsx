@@ -1,5 +1,6 @@
 import AppHeader from './components/layout/AppHeader'
 import { useAuth } from './hooks/useAuth'
+import AdminDashboard from './pages/AdminDashboard'
 import LoginPage from './pages/LoginPage'
 import StudentDashboard from './pages/StudentDashboard'
 
@@ -20,13 +21,7 @@ export default function App() {
       <AppHeader />
 
       <main className="mx-auto max-w-6xl px-4 py-6 sm:py-8">
-        {currentUser.role === 'admin' ? (
-          <div className="rounded-xl border border-slate-200 bg-white p-6">
-            <p className="text-sm text-slate-500">The professor dashboard comes next.</p>
-          </div>
-        ) : (
-          <StudentDashboard />
-        )}
+        {currentUser.role === 'admin' ? <AdminDashboard /> : <StudentDashboard />}
       </main>
     </div>
   )
