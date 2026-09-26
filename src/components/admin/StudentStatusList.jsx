@@ -18,16 +18,7 @@ export default function StudentStatusList({ rows }) {
 
             <div className="min-w-0">
               <p className="truncate text-sm font-medium text-slate-900">{row.student.name}</p>
-              {/*
-                Just the date, with no "Submitted on" in front of it. The pill
-                next to it already says the status, and the longer wording was
-                wide enough to get cut off on a phone.
-              */}
-              <p className="truncate text-xs text-slate-500">
-                {row.status === 'submitted'
-                  ? formatSubmittedAt(row.submittedAt)
-                  : 'Nothing handed in yet'}
-              </p>
+              <SecondLine row={row} />
             </div>
           </div>
 
@@ -35,5 +26,34 @@ export default function StudentStatusList({ rows }) {
         </li>
       ))}
     </ul>
+  )
+}
+
+/*
+  Only the date, with no "Submitted on" in front of it, because the pill beside
+  it already says the status and the longer wording was wide enough to get cut
+  off on a phone.
+
+  The link is checked for being missing rather than for being null, because
+  data saved before submissionLink existed comes back undefined.
+*/
+function SecondLine({ row }) {
+  if (row.status !== 'submitted') {
+    return <p className="truncate text-xs text-slate-500">Nothing handed in yet</p>
+  }
+
+  if (!row.submissionLink) {
+    return <p className="truncate text-xs text-slate-500">{formatSubmittedAt(row.submittedAt)}</p>
+  }
+
+  return (
+    <a
+      href={row.submissionLink}
+      target="_blank"
+      rel="noreferrer"
+      className="block truncate text-xs font-medium text-accent-600 hover:underline"
+    >
+      {formatSubmittedAt(row.submittedAt)}, open their work
+    </a>
   )
 }

@@ -41,6 +41,22 @@ export default function AssignmentCard({ assignment, onMarkSubmitted }) {
           Open Drive folder
         </a>
 
+        {/*
+          The check is for a missing value rather than for null, because data
+          saved before submissionLink existed comes back undefined. Nothing
+          versions what is kept in localStorage, which the README says.
+        */}
+        {isSubmitted && submission.submissionLink ? (
+          <a
+            href={submission.submissionLink}
+            target="_blank"
+            rel="noreferrer"
+            className="rounded-lg border border-slate-200 px-3 py-2 text-xs font-medium text-accent-600 hover:bg-slate-50"
+          >
+            View your submission
+          </a>
+        ) : null}
+
         {isSubmitted ? null : (
           <button
             type="button"
