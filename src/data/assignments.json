@@ -1,0 +1,47 @@
+[
+  {
+    "id": "a-1",
+    "title": "Data Structures Lab Report 3",
+    "description": "Write up your results for the balanced binary tree lab. Include the timing table and a short note on where your implementation differs from the reference.",
+    "driveLink": "https://drive.google.com/drive/folders/1kQ7vN3xR8pLmZ4dT2wY",
+    "createdBy": "u-admin-1",
+    "dueDate": "2026-09-22",
+    "createdAt": "2026-09-10T09:00:00.000Z"
+  },
+  {
+    "id": "a-2",
+    "title": "Operating Systems Case Study",
+    "description": "Pick one real scheduling failure from the reading list and explain what the scheduler did, why it did it, and what you would change.",
+    "driveLink": "https://drive.google.com/drive/folders/1mB9cH4jK6sQwE8rT5uI",
+    "createdBy": "u-admin-1",
+    "dueDate": "2026-09-29",
+    "createdAt": "2026-09-14T10:30:00.000Z"
+  },
+  {
+    "id": "a-3",
+    "title": "Database Design Project Proposal",
+    "description": "Two pages on the system you plan to model, with a first pass at the schema. Normalisation is not marked yet, but your choice of keys is.",
+    "driveLink": "https://drive.google.com/drive/folders/1pL2xF7gD3nMvC9bA6zS",
+    "createdBy": "u-admin-1",
+    "dueDate": "2026-10-05",
+    "createdAt": "2026-09-18T14:15:00.000Z"
+  },
+  {
+    "id": "a-4",
+    "title": "Web Development Portfolio Site",
+    "description": "Build and deploy a small portfolio site. It has to be responsive and it has to work without JavaScript for the main content.",
+    "driveLink": "https://drive.google.com/drive/folders/1tY5wR8qJ2hN6vB4mX7c",
+    "createdBy": "u-admin-2",
+    "dueDate": "2026-10-01",
+    "createdAt": "2026-09-15T11:45:00.000Z"
+  },
+  {
+    "id": "a-5",
+    "title": "Machine Learning Reading Response",
+    "description": "One page on the assigned paper. Say what the authors claim, what evidence they give, and which part you find least convincing.",
+    "driveLink": "https://drive.google.com/drive/folders/1sD6fG9hJ4kL7nP2qW5e",
+    "createdBy": "u-admin-2",
+    "dueDate": "2026-10-08",
+    "createdAt": "2026-09-24T08:20:00.000Z"
+  }
+]
