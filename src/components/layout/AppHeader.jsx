@@ -72,7 +72,7 @@ export default function AppHeader() {
           <button
             type="button"
             onClick={handleReset}
-            className="rounded-lg border border-slate-200 px-2 py-1.5 text-xs font-medium text-slate-600 hover:bg-slate-50 sm:px-2.5"
+            className="rounded-lg px-1.5 py-1.5 text-xs text-slate-500 hover:text-slate-900 hover:underline"
           >
             Reset<span className="hidden sm:inline"> data</span>
           </button>
