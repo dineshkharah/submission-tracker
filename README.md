@@ -2,6 +2,8 @@
 
 A responsive dashboard where students confirm they have handed in their assignments and professors see who has and who has not. Two roles, strict separation of what each one can see, and no backend: the data starts from JSON files and lives in localStorage.
 
+A two minute walkthrough of both roles is in this repo at [demo.mp4](demo.mp4).
+
 ## Running it
 
 You need Node 20.19 or newer.
