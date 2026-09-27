@@ -78,7 +78,7 @@ src/
 
 Three flat collections, shaped the way a relational database would shape them.
 
-`users.json` holds students and professors together, told apart by a `role` field. `assignments.json` holds assignments, each with a `createdBy` pointing at one professor. `submissions.json` is a join table with one row for every assignment and student pair, holding a status and a timestamp.
+`users.json` holds students and professors together, told apart by a `role` field. `assignments.json` holds assignments, each with a `createdBy` pointing at one professor and a `driveLink` saying where students should upload. `submissions.json` is a join table with one row for every assignment and student pair, holding a status, a timestamp and a `submissionLink` pointing at the work that student handed in.
 
 The alternative was to nest a list of students inside each assignment. The join table is better here for three reasons. Both screens fall out of it as simple filters running in opposite directions, the student screen filtering by `studentId` and the professor screen filtering by `assignmentId`, where nesting would have made one of those two awkward. It keeps one copy of each person, so changing a name is a one place edit. And it is the shape a real API would return, so replacing localStorage with `fetch` later would touch the store and nothing else.
 
@@ -92,9 +92,11 @@ Worth being direct about: this is a boundary in the user interface, not a securi
 
 ### How the double verification flow works and why it has two steps
 
-Clicking "Mark as submitted" changes nothing. It opens a modal on step one, which asks whether the work has actually been uploaded and offers a button that opens the Drive folder in a new tab so the student can go and look. Answering "Yes, I have submitted" moves to step two, which names the assignment and says the student cannot undo it themselves. Only "Confirm submission" writes to the store. "Go back" returns to step one rather than closing.
+Clicking "Mark as submitted" changes nothing. It opens a modal on step one, which offers a button that opens the professor's Drive folder in a new tab and asks the student to paste a link to the work they uploaded. Step one will not move on without a value that parses as an http or https link. Answering "Yes, I have submitted" moves to step two, which shows the student exactly what their professor is about to receive and says they cannot undo it themselves. Only "Confirm submission" writes to the store. "Go back" returns to step one with the link still in the box, because the link is held by the modal and the two steps are different views of the same state.
 
-The two steps are not the same question asked twice. The work is uploaded to Google Drive, somewhere this app cannot see, so all the app can do is record a claim it has no way to check. Step one asks the student to go and verify something about the world outside the app. Step two asks them to accept what recording that claim costs them. Collapsing both into one click would put an unverifiable claim that the student cannot reverse one accidental tap away.
+The two steps are not the same question asked twice. The work is uploaded to Drive, somewhere this app cannot see, so the app can only ever record what the student tells it. Step one is where that claim gets something behind it: a link the professor can open and check. Step two asks the student to accept that recording it cannot be taken back. Collapsing both into one click would put a claim the student cannot reverse one accidental tap away, and would leave the professor with a status and no way of checking it.
+
+The task only asked for a confirmation followed by a final confirmation. Asking for the link is a deliberate step past that, because a confirmation with nothing behind it gives a professor a screen full of claims they cannot act on, and it makes step one an action rather than a button that only advances a counter.
 
 The modal holds a single piece of state for which step it is on. The dashboard shows the modal by rendering it and hides it by not rendering it, so closing unmounts the component and that step state resets on its own with no cleanup code.
 
@@ -144,7 +146,9 @@ There is one class. Every assignment goes to every student, with no courses or s
 
 A student cannot undo a submission. That is deliberate, it is what the second confirmation step warns about, but there is no way for a professor to reverse one either, which a real system would need.
 
-The Drive links in the sample data are made up, so opening one lands on a Google Drive error page. Links entered through the create form work normally.
+The Drive links in the sample data are made up, so opening one lands on a Google Drive error page. Links entered through the app work normally.
+
+A submission link is only checked for being a well formed http or https address. Nothing confirms it resolves, that it points at real work, or that the professor has permission to open it. A real system would at least try to fetch it, and would probably want the file itself rather than a link to it.
 
 Everything lives in one browser. Two people on two machines do not see each other's data, and clearing site data resets the app.
 
