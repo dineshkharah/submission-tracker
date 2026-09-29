@@ -172,16 +172,23 @@ export function getAssignmentProgress(data, assignment) {
   return toProgress(done, total)
 }
 
-/* How much of one course a single student has finished. */
-export function getStudentCourseProgress(data, courseId, studentId) {
-  const assignments = getAssignmentsForCourse(data, courseId)
+/*
+  Everything one student's view of one course needs, worked out in a single pass.
 
-  const done = assignments.filter(
-    (assignment) =>
-      getAssignmentStatusForStudent(data, assignment, studentId).state === 'acknowledged',
-  ).length
+  The course card on the dashboard and the course page itself both read this, so the number on the card and the list behind it are the same answer rather than two answers that agree by luck.
 
-  return toProgress(done, assignments.length)
+  overdue is counted separately because it is the only thing on the dashboard worth interrupting somebody for.
+*/
+export function getCourseWorkForStudent(data, courseId, studentId) {
+  const items = getAssignmentsForCourse(data, courseId).map((assignment) => ({
+    assignment,
+    status: getAssignmentStatusForStudent(data, assignment, studentId),
+  }))
+
+  const done = items.filter((item) => item.status.state === 'acknowledged').length
+  const overdue = items.filter((item) => item.status.state === 'overdue').length
+
+  return { items, progress: toProgress(done, items.length), overdue }
 }
 
 /*
