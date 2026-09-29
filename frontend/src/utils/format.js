@@ -1,44 +1,51 @@
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
 /*
-  A due date is a plain YYYY-MM-DD string with no time and no timezone, so it
-  gets split as text. Building a Date from it would be worse, because
-  new Date("2026-10-05") is read as UTC midnight and shows the day before for
-  anyone behind UTC.
-*/
-export function formatDueDate(value) {
-  const [year, month, day] = value.split('-')
+  Round 1 deliberately split a YYYY-MM-DD due date as text, because new Date("2026-10-05") is read as UTC midnight and shows the day before for anyone behind UTC.
 
-  return `${Number(day)} ${MONTHS[Number(month) - 1]} ${year}`
+  Round 2 deadlines carry a time, so they are full ISO timestamps and do describe a real moment. A Date is now the right tool, and the value is shown in the reader's own timezone, which is what they want from a deadline.
+
+  Formatting is done by hand rather than with toLocaleString so the result reads the same on every machine.
+*/
+function parts(value) {
+  const when = new Date(value)
+
+  const hours = when.getHours()
+  const suffix = hours < 12 ? 'am' : 'pm'
+  const hour12 = hours % 12 === 0 ? 12 : hours % 12
+  const minutes = String(when.getMinutes()).padStart(2, '0')
+
+  return {
+    date: `${when.getDate()} ${MONTHS[when.getMonth()]} ${when.getFullYear()}`,
+    time: `${hour12}:${minutes} ${suffix}`,
+  }
 }
 
-/*
-  A submitted time is a full timestamp, so it does describe a real moment and a
-  Date is the right tool. Formatting is done by hand rather than with
-  toLocaleDateString so that the result reads the same on every machine.
-*/
-export function formatSubmittedAt(value) {
-  if (value === null) {
+export function formatDate(value) {
+  if (!value) {
     return ''
   }
 
-  const when = new Date(value)
+  return parts(value).date
+}
 
-  return `${when.getDate()} ${MONTHS[when.getMonth()]} ${when.getFullYear()}`
+export function formatDateTime(value) {
+  if (!value) {
+    return ''
+  }
+
+  const { date, time } = parts(value)
+
+  return `${date}, ${time}`
 }
 
 /*
-  Today in the same YYYY-MM-DD shape the rest of the app uses, built from the
-  local date rather than from toISOString, which would give the UTC date and be
-  a day out for part of the evening in India.
-
-  Because the shape sorts correctly as text, a past date can be spotted with a
-  plain string comparison and no Date maths.
+  Whether a deadline has gone by. Used to tell a pending assignment apart from an overdue one, which is the difference between an amber badge and a red one.
 */
-export function todayAsText() {
-  const now = new Date()
-  const month = String(now.getMonth() + 1).padStart(2, '0')
-  const day = String(now.getDate()).padStart(2, '0')
+export function isPast(value) {
+  if (!value) {
+    return false
+  }
 
-  return `${now.getFullYear()}-${month}-${day}`
+  return new Date(value).getTime() < Date.now()
 }
