@@ -3,6 +3,7 @@ import AppShell from './components/layout/AppShell'
 import LoginPage from './pages/LoginPage'
 import ProfessorDashboard from './pages/ProfessorDashboard'
 import RegisterPage from './pages/RegisterPage'
+import StudentCoursePage from './pages/StudentCoursePage'
 import StudentDashboard from './pages/StudentDashboard'
 import RequireAuth from './routes/RequireAuth'
 import RequireRole from './routes/RequireRole'
@@ -31,6 +32,7 @@ export default function App() {
 
           <Route element={<RequireRole role="student" />}>
             <Route path="/student" element={<StudentDashboard />} />
+            <Route path="/student/courses/:courseId" element={<StudentCoursePage />} />
           </Route>
         </Route>
       </Route>
