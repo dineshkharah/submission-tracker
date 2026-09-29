@@ -1,35 +1,35 @@
 import { useEffect, useState } from 'react'
-import { STORAGE_KEYS, load, remove, save } from '../utils/storage'
+import { STORAGE_KEYS, loadRaw, remove, saveRaw } from '../utils/storage'
+import { makeToken, readToken } from '../utils/token'
 import { AuthContext } from './authContext'
 
 /*
-  This context holds an id and nothing else. The user object itself is looked
-  up from the data store, so there is only one copy of a person's name and role
-  in the app. If that were duplicated here, a saved login from an earlier
-  session could go stale and start disagreeing with the store.
+  This context holds a token and nothing else. It does not know what a user is, cannot look one up, and has no opinion about passwords. That work lives in the useAuth hook, which is where the auth context and the data store meet.
+
+  Keeping the provider this thin means the whole of "who is signed in" is one string, which is the same thing a real app would hold, and swapping the fake token for one issued by a server would not change this file at all.
+
+  The payload is derived on every render rather than stored beside the token. Two copies of the same fact can disagree, and an expiring token is exactly the kind of fact that goes stale while it sits there.
 */
 export function AuthProvider({ children }) {
-  const [currentUserId, setCurrentUserId] = useState(() =>
-    load(STORAGE_KEYS.currentUserId, null),
-  )
+  const [token, setToken] = useState(() => loadRaw(STORAGE_KEYS.token))
 
   useEffect(() => {
-    if (currentUserId === null) {
-      remove(STORAGE_KEYS.currentUserId)
+    if (token === null) {
+      remove(STORAGE_KEYS.token)
     } else {
-      save(STORAGE_KEYS.currentUserId, currentUserId)
+      saveRaw(STORAGE_KEYS.token, token)
     }
-  }, [currentUserId])
+  }, [token])
 
-  function login(userId) {
-    setCurrentUserId(userId)
+  function signIn(user) {
+    setToken(makeToken(user))
   }
 
-  function logout() {
-    setCurrentUserId(null)
+  function signOut() {
+    setToken(null)
   }
 
-  const value = { currentUserId, login, logout }
+  const value = { token, payload: readToken(token), signIn, signOut }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }
