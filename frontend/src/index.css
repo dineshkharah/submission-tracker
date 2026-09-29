@@ -2,18 +2,13 @@
 @import "tw-animate-css";
 
 /*
-  Two layers of naming, which is worth understanding before reading any
-  component.
+  Two layers of naming, which is worth understanding before reading any component.
 
-  :root holds the raw palette, written once, in hex so it stays readable.
-  @theme inline turns each one into a Tailwind utility, so --color-primary
-  gives bg-primary, text-primary and border-primary for free.
+  :root holds the raw palette, written once, in hex so it stays readable. @theme inline turns each one into a Tailwind utility, so --color-primary gives bg-primary, text-primary and border-primary for free.
 
-  Components then only ever say bg-primary or text-muted-foreground. No file
-  outside this one contains a colour, so the whole palette changes here.
+  Components then only ever say bg-primary or text-muted-foreground. No file outside this one contains a colour, so the whole palette changes here.
 
-  There is no dark block. Dark mode is out of scope, and carrying tokens for a
-  theme that does not exist would be dead weight.
+  There is no dark block. Dark mode is out of scope, and carrying tokens for a theme that does not exist would be dead weight.
 */
 
 @theme inline {
@@ -54,7 +49,8 @@
   /* One radius for the whole app. 0.5rem is rounded-lg. */
   --radius: 0.5rem;
 
-  --background: #ffffff;
+  /* slate-50 for the page and white for cards, so a card lifts off the page with a border rather than a shadow */
+  --background: #f8fafc;
   --foreground: #0f172a;
 
   --card: #ffffff;
@@ -98,9 +94,6 @@
 }
 
 /*
-  A progress bar needs a width only known while the app is running. Tailwind
-  reads source as plain text at build time and never runs the code, so a class
-  name put together at runtime is never compiled and the bar would silently
-  have no width. This generates all 101 up front.
+  A progress bar needs a width only known while the app is running. Tailwind reads source as plain text at build time and never runs the code, so a class name put together at runtime is never compiled and the bar would silently have no width. This generates all 101 up front.
 */
 @source inline("w-[{0..100}%]");
