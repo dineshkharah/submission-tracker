@@ -1,0 +1,5 @@
+[
+  { "id": "g-1", "name": "Team Alpha", "courseId": "c-1", "leaderId": "u-stu-1" },
+  { "id": "g-2", "name": "Team Beta", "courseId": "c-1", "leaderId": "u-stu-4" },
+  { "id": "g-3", "name": "Team Gamma", "courseId": "c-1", "leaderId": "u-stu-7" }
+]

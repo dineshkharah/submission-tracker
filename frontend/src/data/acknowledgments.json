@@ -1,0 +1,26 @@
+[
+  { "id": "ack-1", "assignmentId": "a-1", "subjectType": "student", "subjectId": "u-stu-1", "acknowledgedBy": "u-stu-1", "acknowledgedAt": "2026-09-22T11:20:00.000Z", "submissionLink": "https://1drv.ms/b/s!Ag7mK2pQxR4nB9vT" },
+  { "id": "ack-2", "assignmentId": "a-1", "subjectType": "student", "subjectId": "u-stu-2", "acknowledgedBy": "u-stu-2", "acknowledgedAt": "2026-09-19T15:05:00.000Z", "submissionLink": "https://1drv.ms/b/s!Ah3nL5rWyT6pC2xU" },
+  { "id": "ack-3", "assignmentId": "a-1", "subjectType": "student", "subjectId": "u-stu-3", "acknowledgedBy": "u-stu-3", "acknowledgedAt": "2026-09-24T20:45:00.000Z", "submissionLink": "https://1drv.ms/b/s!Ai8pM7sXzU9qD4yV" },
+  { "id": "ack-4", "assignmentId": "a-1", "subjectType": "student", "subjectId": "u-stu-4", "acknowledgedBy": "u-stu-4", "acknowledgedAt": "2026-09-21T09:30:00.000Z", "submissionLink": "https://1drv.ms/b/s!Aj2qN9tYaV3rE6zW" },
+  { "id": "ack-5", "assignmentId": "a-1", "subjectType": "student", "subjectId": "u-stu-5", "acknowledgedBy": "u-stu-5", "acknowledgedAt": "2026-09-25T16:10:00.000Z", "submissionLink": "https://1drv.ms/b/s!Ak5rP2uZbW7sF8aX" },
+  { "id": "ack-6", "assignmentId": "a-1", "subjectType": "student", "subjectId": "u-stu-6", "acknowledgedBy": "u-stu-6", "acknowledgedAt": "2026-09-18T12:55:00.000Z", "submissionLink": "https://1drv.ms/b/s!Al9sQ4vAcX2tG5bY" },
+  { "id": "ack-7", "assignmentId": "a-1", "subjectType": "student", "subjectId": "u-stu-7", "acknowledgedBy": "u-stu-7", "acknowledgedAt": "2026-09-25T17:40:00.000Z", "submissionLink": "https://1drv.ms/b/s!Am4tR6wBdY8uH3cZ" },
+
+  { "id": "ack-8", "assignmentId": "a-2", "subjectType": "group", "subjectId": "g-2", "acknowledgedBy": "u-stu-4", "acknowledgedAt": "2026-09-26T14:15:00.000Z", "submissionLink": "https://1drv.ms/b/s!An7uS8xCeZ4vJ6dA" },
+
+  { "id": "ack-9", "assignmentId": "a-3", "subjectType": "group", "subjectId": "g-1", "acknowledgedBy": "u-stu-1", "acknowledgedAt": "2026-09-27T10:05:00.000Z", "submissionLink": "https://1drv.ms/b/s!Ao1vT3yDfA5wK7eB" },
+  { "id": "ack-10", "assignmentId": "a-3", "subjectType": "group", "subjectId": "g-2", "acknowledgedBy": "u-stu-4", "acknowledgedAt": "2026-09-26T18:30:00.000Z", "submissionLink": "https://1drv.ms/b/s!Ap6wU5zEgB9xL2fC" },
+  { "id": "ack-11", "assignmentId": "a-3", "subjectType": "group", "subjectId": "g-3", "acknowledgedBy": "u-stu-7", "acknowledgedAt": "2026-09-28T09:50:00.000Z", "submissionLink": "https://1drv.ms/b/s!Aq3xV7aFhC6yM8gD" },
+
+  { "id": "ack-12", "assignmentId": "a-4", "subjectType": "student", "subjectId": "u-stu-1", "acknowledgedBy": "u-stu-1", "acknowledgedAt": "2026-09-28T13:25:00.000Z", "submissionLink": "https://1drv.ms/b/s!Ar8yW9bGiD3zN5hE" },
+  { "id": "ack-13", "assignmentId": "a-4", "subjectType": "student", "subjectId": "u-stu-2", "acknowledgedBy": "u-stu-2", "acknowledgedAt": "2026-09-27T19:00:00.000Z", "submissionLink": "https://1drv.ms/b/s!As2zX4cHjE7aP9iF" },
+  { "id": "ack-14", "assignmentId": "a-4", "subjectType": "student", "subjectId": "u-stu-3", "acknowledgedBy": "u-stu-3", "acknowledgedAt": "2026-09-28T21:40:00.000Z", "submissionLink": "https://1drv.ms/b/s!At5aY6dIkF2bQ3jG" },
+
+  { "id": "ack-15", "assignmentId": "a-5", "subjectType": "student", "subjectId": "u-stu-1", "acknowledgedBy": "u-stu-1", "acknowledgedAt": "2026-09-17T10:15:00.000Z", "submissionLink": "https://1drv.ms/b/s!Au9bZ8eJlG4cR6kH" },
+  { "id": "ack-16", "assignmentId": "a-5", "subjectType": "student", "subjectId": "u-stu-2", "acknowledgedBy": "u-stu-2", "acknowledgedAt": "2026-09-15T14:50:00.000Z", "submissionLink": "https://1drv.ms/b/s!Av4cA2fKmH8dS7lJ" },
+  { "id": "ack-17", "assignmentId": "a-5", "subjectType": "student", "subjectId": "u-stu-3", "acknowledgedBy": "u-stu-3", "acknowledgedAt": "2026-09-19T08:20:00.000Z", "submissionLink": "https://1drv.ms/b/s!Aw7dB5gLnJ3eT9mK" },
+  { "id": "ack-18", "assignmentId": "a-5", "subjectType": "student", "subjectId": "u-stu-4", "acknowledgedBy": "u-stu-4", "acknowledgedAt": "2026-09-16T17:35:00.000Z", "submissionLink": "https://1drv.ms/b/s!Ax2eC7hMoK5fU4nL" },
+  { "id": "ack-19", "assignmentId": "a-5", "subjectType": "student", "subjectId": "u-stu-5", "acknowledgedBy": "u-stu-5", "acknowledgedAt": "2026-09-20T11:05:00.000Z", "submissionLink": "https://1drv.ms/b/s!Ay6fD9iNpL7gV2pM" },
+  { "id": "ack-20", "assignmentId": "a-5", "subjectType": "student", "subjectId": "u-stu-6", "acknowledgedBy": "u-stu-6", "acknowledgedAt": "2026-09-18T15:45:00.000Z", "submissionLink": "https://1drv.ms/b/s!Az3gE4jOqM9hW6qN" }
+]

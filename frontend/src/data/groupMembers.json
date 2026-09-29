@@ -1,0 +1,12 @@
+[
+  { "id": "gm-1", "groupId": "g-1", "studentId": "u-stu-1" },
+  { "id": "gm-2", "groupId": "g-1", "studentId": "u-stu-2" },
+  { "id": "gm-3", "groupId": "g-1", "studentId": "u-stu-3" },
+
+  { "id": "gm-4", "groupId": "g-2", "studentId": "u-stu-4" },
+  { "id": "gm-5", "groupId": "g-2", "studentId": "u-stu-5" },
+  { "id": "gm-6", "groupId": "g-2", "studentId": "u-stu-6" },
+
+  { "id": "gm-7", "groupId": "g-3", "studentId": "u-stu-7" },
+  { "id": "gm-8", "groupId": "g-3", "studentId": "u-stu-8" }
+]

@@ -1,0 +1,5 @@
+[
+  { "id": "c-1", "code": "CS301", "title": "Operating Systems", "term": "Autumn 2026", "professorId": "u-prof-1" },
+  { "id": "c-2", "code": "CS402", "title": "Database Systems", "term": "Autumn 2026", "professorId": "u-prof-1" },
+  { "id": "c-3", "code": "CS210", "title": "Web Development", "term": "Autumn 2026", "professorId": "u-prof-2" }
+]

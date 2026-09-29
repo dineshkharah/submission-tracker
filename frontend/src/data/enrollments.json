@@ -1,0 +1,26 @@
+[
+  { "id": "en-1", "courseId": "c-1", "studentId": "u-stu-1" },
+  { "id": "en-2", "courseId": "c-1", "studentId": "u-stu-2" },
+  { "id": "en-3", "courseId": "c-1", "studentId": "u-stu-3" },
+  { "id": "en-4", "courseId": "c-1", "studentId": "u-stu-4" },
+  { "id": "en-5", "courseId": "c-1", "studentId": "u-stu-5" },
+  { "id": "en-6", "courseId": "c-1", "studentId": "u-stu-6" },
+  { "id": "en-7", "courseId": "c-1", "studentId": "u-stu-7" },
+  { "id": "en-8", "courseId": "c-1", "studentId": "u-stu-8" },
+  { "id": "en-9", "courseId": "c-1", "studentId": "u-stu-9" },
+
+  { "id": "en-10", "courseId": "c-2", "studentId": "u-stu-1" },
+  { "id": "en-11", "courseId": "c-2", "studentId": "u-stu-2" },
+  { "id": "en-12", "courseId": "c-2", "studentId": "u-stu-3" },
+  { "id": "en-13", "courseId": "c-2", "studentId": "u-stu-4" },
+  { "id": "en-14", "courseId": "c-2", "studentId": "u-stu-5" },
+  { "id": "en-15", "courseId": "c-2", "studentId": "u-stu-6" },
+
+  { "id": "en-16", "courseId": "c-3", "studentId": "u-stu-4" },
+  { "id": "en-17", "courseId": "c-3", "studentId": "u-stu-5" },
+  { "id": "en-18", "courseId": "c-3", "studentId": "u-stu-6" },
+  { "id": "en-19", "courseId": "c-3", "studentId": "u-stu-7" },
+  { "id": "en-20", "courseId": "c-3", "studentId": "u-stu-8" },
+  { "id": "en-21", "courseId": "c-3", "studentId": "u-stu-9" },
+  { "id": "en-22", "courseId": "c-3", "studentId": "u-stu-10" }
+]

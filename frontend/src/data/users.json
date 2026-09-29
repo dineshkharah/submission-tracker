@@ -1,72 +1,15 @@
 [
-  {
-    "id": "u-admin-1",
-    "name": "Dr. Meera Iyer",
-    "email": "meera.iyer@university.edu",
-    "role": "admin",
-    "initials": "MI"
-  },
-  {
-    "id": "u-admin-2",
-    "name": "Prof. Arjun Rao",
-    "email": "arjun.rao@university.edu",
-    "role": "admin",
-    "initials": "AR"
-  },
-  {
-    "id": "u-stu-1",
-    "name": "Aarav Sharma",
-    "email": "aarav.sharma@university.edu",
-    "role": "student",
-    "initials": "AS"
-  },
-  {
-    "id": "u-stu-2",
-    "name": "Priya Nair",
-    "email": "priya.nair@university.edu",
-    "role": "student",
-    "initials": "PN"
-  },
-  {
-    "id": "u-stu-3",
-    "name": "Rohan Gupta",
-    "email": "rohan.gupta@university.edu",
-    "role": "student",
-    "initials": "RG"
-  },
-  {
-    "id": "u-stu-4",
-    "name": "Sanya Kapoor",
-    "email": "sanya.kapoor@university.edu",
-    "role": "student",
-    "initials": "SK"
-  },
-  {
-    "id": "u-stu-5",
-    "name": "Vikram Singh",
-    "email": "vikram.singh@university.edu",
-    "role": "student",
-    "initials": "VS"
-  },
-  {
-    "id": "u-stu-6",
-    "name": "Ananya Desai",
-    "email": "ananya.desai@university.edu",
-    "role": "student",
-    "initials": "AD"
-  },
-  {
-    "id": "u-stu-7",
-    "name": "Kabir Malhotra",
-    "email": "kabir.malhotra@university.edu",
-    "role": "student",
-    "initials": "KM"
-  },
-  {
-    "id": "u-stu-8",
-    "name": "Ishita Reddy",
-    "email": "ishita.reddy@university.edu",
-    "role": "student",
-    "initials": "IR"
-  }
+  { "id": "u-prof-1", "name": "Dr. Meera Iyer", "email": "meera.iyer@university.edu", "role": "professor", "initials": "MI", "password": "password123" },
+  { "id": "u-prof-2", "name": "Prof. Arjun Rao", "email": "arjun.rao@university.edu", "role": "professor", "initials": "AR", "password": "password123" },
+
+  { "id": "u-stu-1", "name": "Aarav Sharma", "email": "aarav.sharma@university.edu", "role": "student", "initials": "AS", "password": "password123" },
+  { "id": "u-stu-2", "name": "Priya Nair", "email": "priya.nair@university.edu", "role": "student", "initials": "PN", "password": "password123" },
+  { "id": "u-stu-3", "name": "Rohan Gupta", "email": "rohan.gupta@university.edu", "role": "student", "initials": "RG", "password": "password123" },
+  { "id": "u-stu-4", "name": "Sanya Kapoor", "email": "sanya.kapoor@university.edu", "role": "student", "initials": "SK", "password": "password123" },
+  { "id": "u-stu-5", "name": "Vikram Singh", "email": "vikram.singh@university.edu", "role": "student", "initials": "VS", "password": "password123" },
+  { "id": "u-stu-6", "name": "Ananya Desai", "email": "ananya.desai@university.edu", "role": "student", "initials": "AD", "password": "password123" },
+  { "id": "u-stu-7", "name": "Kabir Malhotra", "email": "kabir.malhotra@university.edu", "role": "student", "initials": "KM", "password": "password123" },
+  { "id": "u-stu-8", "name": "Ishita Reddy", "email": "ishita.reddy@university.edu", "role": "student", "initials": "IR", "password": "password123" },
+  { "id": "u-stu-9", "name": "Neha Joshi", "email": "neha.joshi@university.edu", "role": "student", "initials": "NJ", "password": "password123" },
+  { "id": "u-stu-10", "name": "Aditya Menon", "email": "aditya.menon@university.edu", "role": "student", "initials": "AM", "password": "password123" }
 ]
