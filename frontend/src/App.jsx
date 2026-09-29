@@ -1,46 +1,42 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { useData } from './hooks/useData'
+import { Navigate, Route, Routes } from 'react-router'
+import AppShell from './components/layout/AppShell'
+import LoginPage from './pages/LoginPage'
+import ProfessorDashboard from './pages/ProfessorDashboard'
+import RegisterPage from './pages/RegisterPage'
+import StudentDashboard from './pages/StudentDashboard'
+import RequireAuth from './routes/RequireAuth'
+import RequireRole from './routes/RequireRole'
+import RoleHome from './routes/RoleHome'
 
 /*
-  A holding screen for one milestone. The real routes and the login screen arrive next, and this goes with them.
+  The whole route table, deliberately in one readable block.
 
-  It earns its place for now by reading the store the same way every real screen will, so if the seed files or the provider were wrong this page would say so rather than the app failing silently later.
+  It nests rather than repeating checks. RequireAuth wraps everything private, so no page below it ever has to ask whether somebody is signed in. AppShell then draws the header once for all of them. RequireRole wraps each role's section, so no page has to ask whose it is either. Every screen below can just read currentUser and get on with it.
+
+  RoleHome sits outside AppShell on purpose. It renders nothing and redirects, so putting it inside would flash a header for an instant on the way past.
 */
 export default function App() {
-  const data = useData()
-
-  const collections = [
-    ['Users', data.users.length],
-    ['Courses', data.courses.length],
-    ['Enrollments', data.enrollments.length],
-    ['Groups', data.groups.length],
-    ['Group members', data.groupMembers.length],
-    ['Assignments', data.assignments.length],
-    ['Acknowledgments', data.acknowledgments.length],
-  ]
-
   return (
-    <div className="min-h-screen bg-slate-50 p-6">
-      <Card className="mx-auto max-w-md">
-        <CardHeader>
-          <CardTitle>Data layer</CardTitle>
-        </CardHeader>
+    <Routes>
+      <Route path="/login" element={<LoginPage />} />
+      <Route path="/register" element={<RegisterPage />} />
 
-        <CardContent>
-          <p className="text-muted-foreground mb-4 text-sm">
-            Loaded from the seed files and saved to localStorage. The screens are built next.
-          </p>
+      <Route element={<RequireAuth />}>
+        <Route path="/" element={<RoleHome />} />
 
-          <dl className="divide-border divide-y text-sm">
-            {collections.map(([label, count]) => (
-              <div key={label} className="flex items-center justify-between py-2">
-                <dt className="text-muted-foreground">{label}</dt>
-                <dd className="font-medium">{count}</dd>
-              </div>
-            ))}
-          </dl>
-        </CardContent>
-      </Card>
-    </div>
+        <Route element={<AppShell />}>
+          <Route element={<RequireRole role="professor" />}>
+            <Route path="/professor" element={<ProfessorDashboard />} />
+          </Route>
+
+          <Route element={<RequireRole role="student" />}>
+            <Route path="/student" element={<StudentDashboard />} />
+          </Route>
+        </Route>
+      </Route>
+
+      {/* Anything unrecognised goes to "/", which decides where that person belongs, or to the login screen if nobody is signed in. */}
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
   )
 }
