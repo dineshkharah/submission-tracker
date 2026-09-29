@@ -92,8 +92,3 @@
     @apply bg-background text-foreground;
   }
 }
-
-/*
-  A progress bar needs a width only known while the app is running. Tailwind reads source as plain text at build time and never runs the code, so a class name put together at runtime is never compiled and the bar would silently have no width. This generates all 101 up front.
-*/
-@source inline("w-[{0..100}%]");
