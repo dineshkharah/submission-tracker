@@ -9,6 +9,7 @@ import StudentDashboard from './pages/StudentDashboard'
 import RequireAuth from './routes/RequireAuth'
 import RequireRole from './routes/RequireRole'
 import RoleHome from './routes/RoleHome'
+import ScrollToTop from './routes/ScrollToTop'
 
 /*
   The whole route table, deliberately in one readable block.
@@ -19,28 +20,32 @@ import RoleHome from './routes/RoleHome'
 */
 export default function App() {
   return (
-    <Routes>
-      <Route path="/login" element={<LoginPage />} />
-      <Route path="/register" element={<RegisterPage />} />
+    <>
+      <ScrollToTop />
 
-      <Route element={<RequireAuth />}>
-        <Route path="/" element={<RoleHome />} />
+      <Routes>
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
 
-        <Route element={<AppShell />}>
-          <Route element={<RequireRole role="professor" />}>
-            <Route path="/professor" element={<ProfessorDashboard />} />
-            <Route path="/professor/courses/:courseId" element={<ProfessorCoursePage />} />
-          </Route>
+        <Route element={<RequireAuth />}>
+          <Route path="/" element={<RoleHome />} />
 
-          <Route element={<RequireRole role="student" />}>
-            <Route path="/student" element={<StudentDashboard />} />
-            <Route path="/student/courses/:courseId" element={<StudentCoursePage />} />
+          <Route element={<AppShell />}>
+            <Route element={<RequireRole role="professor" />}>
+              <Route path="/professor" element={<ProfessorDashboard />} />
+              <Route path="/professor/courses/:courseId" element={<ProfessorCoursePage />} />
+            </Route>
+
+            <Route element={<RequireRole role="student" />}>
+              <Route path="/student" element={<StudentDashboard />} />
+              <Route path="/student/courses/:courseId" element={<StudentCoursePage />} />
+            </Route>
           </Route>
         </Route>
-      </Route>
 
-      {/* Anything unrecognised goes to "/", which decides where that person belongs, or to the login screen if nobody is signed in. */}
-      <Route path="*" element={<Navigate to="/" replace />} />
-    </Routes>
+        {/* Anything unrecognised goes to "/", which decides where that person belongs, or to the login screen if nobody is signed in. */}
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </>
   )
 }
