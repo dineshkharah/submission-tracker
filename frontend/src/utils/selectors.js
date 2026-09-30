@@ -157,19 +157,51 @@ export function getAssignmentStatusForStudent(data, assignment, studentId) {
 /* Progress */
 
 /*
+  Who is accounted for on one assignment and who is not, named rather than only counted.
+
+  The subjects are students for individual work and groups for group work, which is the same rule the acknowledgment row itself follows. The professor's list and the student's button are therefore two readings of one idea rather than two rules that have to be kept in step.
+
+  Walking the course's subjects rather than the assignment's rows also means the denominator is the course, so a row left behind by data that no longer belongs to the course cannot inflate the count.
+*/
+export function getAssignmentBreakdown(data, assignment) {
+  const isGroupWork = assignment.submissionType === 'group'
+
+  const subjects = isGroupWork
+    ? getGroupsInCourse(data, assignment.courseId)
+    : getStudentsInCourse(data, assignment.courseId)
+
+  const done = []
+  const waiting = []
+
+  for (const subject of subjects) {
+    const acknowledgment = findAcknowledgment(
+      data,
+      assignment.id,
+      isGroupWork ? 'group' : 'student',
+      subject.id,
+    )
+
+    const entry = { id: subject.id, name: subject.name, acknowledgment }
+
+    if (acknowledgment === null) {
+      waiting.push(entry)
+    } else {
+      done.push(entry)
+    }
+  }
+
+  return { done, waiting }
+}
+
+/*
   How many have handed in, against the right denominator. For group work the denominator is the number of groups in the course, not the number of students, because one group hands in once.
 
-  Counting rows for the assignment is enough without also filtering on subjectType, because an assignment is either individual or group and the write path only ever creates the matching kind.
+  Counted off the same walk that produces the names, so the bar and the list under it can never tell the professor two different things.
 */
 export function getAssignmentProgress(data, assignment) {
-  const total =
-    assignment.submissionType === 'group'
-      ? getGroupsInCourse(data, assignment.courseId).length
-      : getStudentsInCourse(data, assignment.courseId).length
+  const { done, waiting } = getAssignmentBreakdown(data, assignment)
 
-  const done = data.acknowledgments.filter((row) => row.assignmentId === assignment.id).length
-
-  return toProgress(done, total)
+  return toProgress(done.length, done.length + waiting.length)
 }
 
 /*
