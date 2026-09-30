@@ -1,6 +1,7 @@
 import { Navigate, Route, Routes } from 'react-router'
 import AppShell from './components/layout/AppShell'
 import LoginPage from './pages/LoginPage'
+import ProfessorCoursePage from './pages/ProfessorCoursePage'
 import ProfessorDashboard from './pages/ProfessorDashboard'
 import RegisterPage from './pages/RegisterPage'
 import StudentCoursePage from './pages/StudentCoursePage'
@@ -28,6 +29,7 @@ export default function App() {
         <Route element={<AppShell />}>
           <Route element={<RequireRole role="professor" />}>
             <Route path="/professor" element={<ProfessorDashboard />} />
+            <Route path="/professor/courses/:courseId" element={<ProfessorCoursePage />} />
           </Route>
 
           <Route element={<RequireRole role="student" />}>
