@@ -1,14 +1,15 @@
 # Submission Tracker
 
-A responsive dashboard where students confirm they have handed in their assignments and professors see who has and who has not. Two roles, strict separation of what each one can see, and no backend: the data starts from JSON files and lives in localStorage.
+A responsive dashboard where students acknowledge that they have handed in their coursework and professors see who has and who has not, organised by course and by group. Two roles, a simulated sign in flow, and no backend: the data starts from JSON files and lives in localStorage.
 
-A two minute walkthrough of both roles is on [YouTube](https://youtu.be/Ngkh5BlgEWA), and the same recording is in this repo at [Joineazy demo video.mp4](Joineazy%20demo%20video.mp4).
+Live at [submission-tracker-ruby.vercel.app](https://submission-tracker-ruby.vercel.app).
 
 ## Running it
 
-You need Node 20.19 or newer.
+You need Node 20.19 or newer. Everything lives in `frontend/`.
 
 ```
+cd frontend
 npm install
 npm run dev
 ```
@@ -18,119 +19,207 @@ That prints a local URL, usually `http://localhost:5173`.
 ```
 npm run build     # production build into dist/
 npm run preview   # serve the production build
-npm run lint      # oxlint, which ships with the vite template
+npm run lint      # oxlint
 ```
 
 ## Signing in
 
-There is no real login. The first screen lists everybody in the sample data and you pick one, which stands in for authentication.
+Every sample account uses the password `password123`, and the sign in screen lists two of them so the app can be opened without reading this file.
 
-Two professors: Dr. Meera Iyer, who set three of the assignments, and Prof. Arjun Rao, who set the other two. Signing in as each in turn shows that a professor only sees their own.
+Professors:
 
-Eight students. Aarav Sharma is the interesting one to start with. He has handed in three of five, so there is something to submit and something already done.
+- `meera.iyer@university.edu` teaches CS301 Operating Systems and CS402 Database Systems
+- `arjun.rao@university.edu` teaches CS210 Web Development, where nothing has been handed in yet
 
-The "Reset data" button in the header puts everything back to the sample data, which is useful after trying the submission flow.
+Students, the three worth starting with:
+
+- `aarav.sharma@university.edu` leads Team Alpha and has one group assignment still to hand in, so the group flow can be tried from the leader's side
+- `priya.nair@university.edu` is in Team Alpha but is not the leader, so she sees the same statuses with no controls
+- `neha.joshi@university.edu` is enrolled on CS301 but is in no group, which is the case the task asks for a prompt on
+
+The most useful thing to try: sign in as Aarav, acknowledge **Deadlock Simulation**, then sign in as Priya and look at the same assignment. One write by the leader, and every member of the group reads it.
+
+Registering creates a real account in the store and signs you straight in. It starts with no courses, because enrolment is something a university sets, so sign in with a sample account to see a full dashboard.
+
+## Screenshots
+
+Sign in
+
+![Sign in](screenshots/sign-in.png)
+
+Student dashboard and course page
+
+![Student dashboard](screenshots/student-dashboard.png)
+
+![Student course page](screenshots/student-course.png)
+
+Professor dashboard and course page
+
+![Professor dashboard](screenshots/professor-dashboard.png)
+
+![Professor course page](screenshots/professor-course.png)
+
+On a phone
+
+![Mobile](screenshots/mobile.png)
 
 ## Folder structure
 
 ```
-src/
+frontend/src/
   components/
-    common/     pieces both roles use: ProgressBar, StatusPill, Modal, EmptyState, Logo
-    layout/     the app header
-    student/    the student's assignment card, progress summary and submission modal
-    admin/      the professor's assignment card, student status list and create form
-  context/      the two React contexts and their providers, four files, see below
-  data/         the JSON seed files, read once at startup and never written to
-  hooks/        useData and useAuth, the only way components reach a context
-  pages/        the three screens: LoginPage, StudentDashboard, AdminDashboard
-  utils/        storage.js for localStorage, selectors.js for role based reads, format.js for dates
-  App.jsx       picks which screen to show
+    common/     shared pieces: StatusBadge, ProgressSummary, Field, EmptyState, Logo
+    layout/     AppShell for signed in screens, AuthLayout for sign in and register
+    professor/  CourseCard, AssignmentCard, AssignmentDialog
+    student/    CourseCard, AssignmentCard, AcknowledgeDialog
+    ui/         shadcn components, copied in and owned rather than imported
+  context/      the two contexts and their providers, four files, see below
+  data/         the seven JSON seed files, read once at startup and never written to
+  hooks/        useData and useAuth, the only way a component reaches a context
+  pages/        one file per screen, six of them
+  routes/       RequireAuth, RequireRole, RoleHome, ScrollToTop
+  utils/        storage, selectors, format, token, validate
+  App.jsx       the whole route table
   main.jsx      mounts the app inside both providers
-  index.css     the Tailwind import and the theme
+  index.css     the theme, and the only file in the project containing a colour
 ```
 
-## Screens and components
+## Component structure
 
-`App.jsx` decides which screen shows. No signed in user means the login screen, a professor gets the admin dashboard, anyone else gets the student dashboard. That is the entire routing layer.
+`App.jsx` holds the entire route table in one block, and it nests so that no page repeats a check. `RequireAuth` wraps everything private, so no screen below it asks whether somebody is signed in. `AppShell` draws the header once for all of them. `RequireRole` wraps each role's section, so no screen asks whose it is either. Every page below can read `currentUser` and get on with its job.
 
-`LoginPage` lists every person in the sample data as a card and signs you in as whoever you click.
+`RoleHome` is the role based redirect and sits outside `AppShell` on purpose, because it renders nothing and would otherwise flash a header on the way past.
 
-`AppHeader` shows who you are and your role, and holds "Switch user" and "Reset data".
+The two roles have parallel screens rather than shared ones:
 
-`StudentDashboard` shows your progress summary and your own assignments, and holds which assignment the submission modal is currently about.
+- `StudentDashboard` lists enrolled courses with progress, and says at the top how many assignments are actually waiting on that person
+- `StudentCoursePage` lists every assignment in one course with its status and its action
+- `ProfessorDashboard` lists the courses they teach with a headline completion figure per course
+- `ProfessorCoursePage` lists every assignment with its progress, who is still outstanding, a filter and the create button
 
-`AssignmentCard` draws one assignment for a student. It is handed the assignment with its own submission row already attached and reports clicks upward, so it holds no state of its own.
+`student/AssignmentCard` and `professor/AssignmentCard` are separate files, and deliberately so. They show the same assignment but answer different questions. A student asks whether they have handed this in. A professor asks how many have and which of them have not. Merging them would mean a component full of `if role` branches, which is harder to read than two files that each say one thing.
 
-`SubmissionModal` runs the two step confirmation and only writes to the store on the second step.
+`AcknowledgeDialog` runs the two step flow and is the only thing in the app that writes an acknowledgment. `AssignmentDialog` is one form used for both creating and editing, since both ask for exactly the same five fields.
 
-`AdminDashboard` shows the create form and the assignments this professor created.
-
-`AssignmentAdminCard` shows one assignment with its progress bar, and expands to reveal every student's status. Whether it is expanded is its own business, so that state lives inside the card.
-
-`StudentStatusList` draws one row per student for a single assignment.
-
-`CreateAssignmentForm` is four controlled fields and one errors object, with no form library.
-
-`ProgressBar` takes a count and a total and knows nothing else, which is why the student summary and the professor's per assignment bar are the same component.
+`Field` takes an input as children rather than rendering one, so the same layout works with an `Input`, a `Textarea` or a `Select` without knowing anything about them.
 
 ## Design decisions
 
-### Why the data is shaped the way it is
+### The palette, and why it is this small
 
-Three flat collections, shaped the way a relational database would shape them.
+Neutrals are slate. `slate-50` for the page, white for cards, `slate-200` for borders, `slate-900` for headings and `slate-600` for body text. A card lifts off the page with a border rather than a shadow, which is quieter and holds up better on a dense screen.
 
-`users.json` holds students and professors together, told apart by a `role` field. `assignments.json` holds assignments, each with a `createdBy` pointing at one professor and a `driveLink` saying where students should upload. `submissions.json` is a join table with one row for every assignment and student pair, holding a status, a timestamp and a `submissionLink` pointing at the work that student handed in.
+Exactly one accent, `indigo-600`, and it only ever means "this is an action or the thing you are on". Nothing decorative is indigo, so a blue thing on the page is always something to click.
 
-The alternative was to nest a list of students inside each assignment. The join table is better here for three reasons. Both screens fall out of it as simple filters running in opposite directions, the student screen filtering by `studentId` and the professor screen filtering by `assignmentId`, where nesting would have made one of those two awkward. It keeps one copy of each person, so changing a name is a one place edit. And it is the shape a real API would return, so replacing localStorage with `fetch` later would touch the store and nothing else.
+Three status colours and no more: `emerald-600` acknowledged, `amber-500` pending, `red-600` overdue. Because there are only three, a colour always means the same thing wherever it appears, and somebody can learn the whole scheme in one glance at one screen.
 
-One decision inside that is worth calling out. A submission row exists for every pair from the moment an assignment is created, starting at `not_submitted`, rather than being created when somebody submits. That is because a professor needs a denominator for the progress bar and needs to name the students who have not handed in. Working "not submitted" out from a missing row would mean rebuilding the expected list on every render. With the rows already there the arithmetic is just submitted over total. The consequence is that creating an assignment fans out one blank row per student, which is what `createAssignment` does.
+Every one of these lives in `src/index.css` in two layers. `:root` holds the raw hex and `@theme inline` turns each into a Tailwind utility, so a component only ever says `bg-primary` or `text-muted-foreground`. No file outside `index.css` contains a colour, which means the whole palette changes in one place.
+
+Type is Inter, one radius, `rounded-lg`, everywhere.
+
+### Why status colour is never the only signal
+
+Every status badge carries an icon as well as a colour. Roughly one man in twelve cannot reliably tell the green from the red, and a badge that says its meaning only in colour says nothing at all to them. The icons cost one line each.
+
+### Why shadcn/ui
+
+It is Tailwind based, so it agrees with the rest of the stack instead of fighting it, and it gave the cards, dialogs, badges, progress bars and toasts a finished look immediately.
+
+The part worth understanding is that it is not a dependency being imported from. The components are source copied into `src/components/ui`, so every one of them can be opened and read, and they were edited where needed. `sonner.jsx` arrived importing `next-themes` to follow a dark mode this app does not have, so that import was removed and the package uninstalled rather than carried.
+
+It is configured on the slate base with `--primary` pointed at indigo-600, so its own tokens and the fixed palette above are the same set of values rather than two schemes sitting on top of each other.
+
+### How the data is shaped
+
+Seven flat collections, joined by join tables, shaped the way a relational database would shape them. Nothing is nested.
+
+```
+users           { id, name, email, role, initials, password }
+courses         { id, code, title, term, professorId }
+enrollments     { id, courseId, studentId }
+groups          { id, name, courseId, leaderId }
+groupMembers    { id, groupId, studentId }
+assignments     { id, courseId, title, description, oneDriveLink, deadline,
+                  submissionType, createdBy, createdAt, updatedAt }
+acknowledgments { id, assignmentId, subjectType, subjectId,
+                  acknowledgedBy, acknowledgedAt, submissionLink }
+```
+
+Leadership sits on the group as `leaderId` rather than as a role column on the membership row. One leader per group is then true by construction, where a role column would allow two leaders to exist by accident.
+
+### How a group acknowledgment reaches every member
+
+This is the piece worth reading the code for, and the answer is one sentence: an acknowledgment belongs to whoever is accountable for the work.
+
+For individual work that is the student, so the row is `subjectType: "student"` with `subjectId` set to them. For group work that is the group, so the row is `subjectType: "group"` with `subjectId` set to the group and `acknowledgedBy` recording which leader pressed it.
+
+Members are never written to. A member's status is derived: find their group within that assignment's course, then look for that group's row. One write, and every member reads the same row. There is nothing to keep in sync, nothing goes stale if the membership changes later, and a member sees "Aarav Sharma acknowledged this on 30 Sep" because the leader's name is on the row they are already reading.
+
+The alternative considered was to fan out a row per member when the leader acknowledges. That copies one fact into as many rows as there are members, and turns a derivation into a synchronisation problem the moment anybody joins or leaves. The other option was two separate tables, one for student acknowledgments and one for group ones, which is flatter but repeats the same shape and the same logic twice.
+
+Who is allowed to press the button is one check in one place, `group.leaderId === studentId`, and it is returned as `canAcknowledge` from `getAssignmentStatusForStudent`. The button asks that function whether to render, and `DataProvider.acknowledge` asks the same function before writing, so the interface and the store cannot disagree about permission. A member sees the status and gets no control.
+
+That gate is substantive rather than a greyed out button. Because the leader also supplies the link to the work on the group's behalf, a member does not simply lack permission to tick a box, they have nothing to submit on the group's behalf.
+
+### A position that changed from the previous round, on purpose
+
+The previous round pre created a submission row for every assignment and student pair the moment an assignment existed, because there was no enrollment table and a professor needed a denominator for the progress bar.
+
+This round has `enrollments` and `groups`, so the denominator is derivable: enrolled students for individual work, groups in the course for group work. Pre creating rows is therefore unnecessary, and a row now exists only once somebody has actually acknowledged something. The earlier decision was right for the data available then, and the new tables make the simpler model correct now.
+
+### Why the acknowledgment has two steps
+
+Step one asks for a link to the work and will not move on without something that parses as an http or https address. Step two puts that link back in front of the student, with the deadline and, for group work, the name of the group and how many people it covers, and only then writes.
+
+The two steps are not the same question asked twice. An acknowledgment is a claim about work that lives somewhere this app cannot see, so step one is where that claim gets something behind it, a link a professor can open. Step two is where somebody looks at what they are about to put on the record, for something that cannot be undone. Collapsing them into one click would put an irreversible claim one accidental tap away and leave the professor with a status they cannot check.
 
 ### How role isolation is enforced
 
-Every read goes through a pure function in `src/utils/selectors.js`, and no component ever touches the raw arrays. `getAssignmentsForStudent` finds a student's work through their own submission rows. `getAssignmentsForAdmin` filters by `createdBy`. Each screen is handed only the slice its role is allowed to see, so a student component cannot render somebody else's row because it never receives one.
+Every read goes through a named function in `src/utils/selectors.js`, and no screen touches the raw arrays.
 
-Worth being direct about: this is a boundary in the user interface, not a security boundary. Every row is in the browser, so anyone who opens the console can read all of it. A real system would check the signed in user on the server for each request. `selectors.js` is exactly where those API calls would go, which is the point of keeping the reads in one small file instead of spreading filters through the components.
+The pattern used throughout is to ask the narrower question rather than to ask a broad one and then check the answer. `StudentCoursePage` looks up the course inside `getCoursesForStudent` rather than finding it in the courses table and then testing whether they are enrolled. A course they are not enrolled in is therefore never found in the first place, and there is no separate permission check that could be forgotten on a page written later. `ProfessorCoursePage` does the same thing through `getCoursesForProfessor`.
 
-### How the double verification flow works and why it has two steps
+A course that does not exist and a course that belongs to somebody else get the same message, deliberately, because two different messages would confirm which one it was.
 
-Clicking "Mark as submitted" changes nothing. It opens a modal on step one, which offers a button that opens the professor's Drive folder in a new tab and asks the student to paste a link to the work they uploaded. Step one will not move on without a value that parses as an http or https link. Answering "Yes, I have submitted" moves to step two, which shows the student exactly what their professor is about to receive and says they cannot undo it themselves. Only "Confirm submission" writes to the store. "Go back" returns to step one with the link still in the box, because the link is held by the modal and the two steps are different views of the same state.
+Worth being direct about: this is a boundary in the user interface, not a security boundary. Every row is in the browser and can be read from the console. A real system checks the signed in user on the server for each request, and `selectors.js` is exactly where those calls would go, which is the point of keeping the reads in one small file instead of spreading filters through the components.
 
-The two steps are not the same question asked twice. The work is uploaded to Drive, somewhere this app cannot see, so the app can only ever record what the student tells it. Step one is where that claim gets something behind it: a link the professor can open and check. Step two asks the student to accept that recording it cannot be taken back. Collapsing both into one click would put a claim the student cannot reverse one accidental tap away, and would leave the professor with a status and no way of checking it.
+### The simulated JWT, and what it is not
 
-The task only asked for a confirmation followed by a final confirmation. Asking for the link is a deliberate step past that, because a confirmation with nothing behind it gives a professor a screen full of claims they cannot act on, and it makes step one an action rather than a button that only advances a counter.
+The task asks for a JWT flow and also permits a mock API, so the token is built with the shape of a real one and nothing behind it. `makeToken` produces `base64url(header).base64url(payload).signature` with the payload `{ sub, role, name, iat, exp }`, `alg: none` in the header, and a fixed string where a signature belongs. `readToken` decodes it, checks `exp`, and returns null for anything malformed: not a string, the wrong number of parts, invalid base64, invalid JSON, a missing expiry or a past one. The expiry is real and is eight hours.
 
-The modal holds a single piece of state for which step it is on. The dashboard shows the modal by rendering it and hides it by not rendering it, so closing unmounts the component and that step state resets on its own with no cleanup code.
+Being plain about the limits, because they matter:
+
+- Nothing is signed and nothing is verified. Anyone can edit the payload in devtools, set `role` to `professor`, and this app will believe them. That was tested to be sure it is true rather than assumed.
+- The payload is readable by anyone. Base64 is encoding, not encryption.
+- Passwords sit in plaintext in the seed files and are compared as plaintext.
+
+In a real system the signature is verified on the server on every request, and the client treats the token as opaque. The only honest reason this passes for authentication here is that there is no server to lie to.
+
+One implementation detail worth knowing: encoding goes through `TextEncoder` before `btoa`, because plain `btoa` throws on any character outside Latin 1, which a registered name can easily contain.
+
+`AuthProvider` holds only a token string. It does not know what a user is and has no opinion about passwords. `useAuth` is where the auth context and the data store meet, which is why `login` and `register` live there. The day a real server issues the token, only `useAuth` changes. The payload is decoded on every render rather than stored beside the token, because two copies of the same fact can disagree and an expiring token is exactly the kind of fact that goes stale sitting in state.
 
 ### How state persists
 
-`src/data` holds the seed files. They are read once, copied into React state, and never written to, so a reset always has something clean to go back to.
+`src/data` holds the seed files. They are read once, copied into React state, and never written to, so there is always something clean to fall back to.
 
-From then on the data store writes itself to localStorage whenever it changes, under the key `submission-tracker:data`. The signed in user is stored separately as `submission-tracker:current-user-id`, and only the id is stored, not a copy of the person, so a login saved last week cannot start disagreeing with the store.
+From then on the store writes itself to localStorage under `submission-tracker:v2:data`, and the token lives separately under `submission-tracker:token`.
 
-Every call into localStorage is wrapped in try and catch. It throws rather than returning null when a browser blocks site data, which happens in private windows, and stored text can be stale or edited by hand so parsing it can throw too. In every one of those cases the app falls back to the seed data rather than failing to start.
+The version is in the key rather than in a field inside the saved object. Old data is simply never read, the app starts from seed, and there is no migration code to write or to get wrong. That closes a limitation named in the previous round's README, which was that unversioned storage would hand anybody who had used an older build data in a shape the new build could not read.
 
-"Reset data" in the header throws away the saved copy and goes back to the seed. It exists so the submission flow can be tried more than once without clearing site data by hand.
+Every call into localStorage is wrapped in try and catch, because it throws rather than returning null when a browser blocks site data, which happens in private windows, and because stored text can be stale or edited by hand so parsing it can throw too. In all of those cases the app falls back to the seed rather than failing to start.
 
-### Why there is no router
+### Dates
 
-The app has three screens and which one shows is decided entirely by who is signed in. A routing library would add a dependency and a set of URLs without answering a question the app is asking. `App.jsx` is the whole routing layer and it is about five lines.
+Deadlines carry a time, so they are stored as full ISO timestamps and displayed in the reader's own timezone.
 
-### Where the Tailwind config file is
+The form field needs the opposite conversion, and `toLocalInput` reads the parts off the local `Date` rather than slicing them out of `toISOString`. `toISOString` answers in UTC, so slicing it would hand a professor in India a time five and a half hours away from the one they had just typed.
 
-There is no `tailwind.config.js` and no `postcss.config.js`, because Tailwind v4 does not use them. The plugin is wired into `vite.config.js` and the theme lives in an `@theme` block in `src/index.css`. Anything declared there becomes a real utility class, which is how `bg-accent-600` exists.
+A new assignment cannot be dated in the past, because nobody could hand it in. An existing one can be, because editing the wording of something whose deadline has already gone by is completely ordinary.
 
-### The progress bar width
+### Why the submission type locks after the first acknowledgment
 
-Tailwind reads source files as plain text when it builds and never runs the code, so a class name put together while the app is running is never compiled. A width like `w-[60%]` worked out from a count would silently produce a bar with no width and no error anywhere. Inline styles would solve it in one line but the whole app is meant to be styled with Tailwind alone.
-
-The fix is one line in `index.css`:
-
-```css
-@source inline("w-[{0..100}%]");
-```
-
-That tells Tailwind to generate all 101 percentage widths up front, so whichever one the app asks for already exists. It is the v4 replacement for what v3 called `safelist`.
+An acknowledgment row points at a student for individual work and at a group for group work. Changing an assignment from one type to the other would leave every answer already given pointing at the wrong kind of thing. So the select is disabled once anybody has acknowledged, and says why. Everything else about the assignment stays editable, because a clearer description or a later deadline breaks nothing.
 
 ### Why `src/context` has four files
 
@@ -138,40 +227,50 @@ A file that exports a provider component and its context object together breaks 
 
 ### Responsive approach
 
-Mobile first. The base classes describe the phone layout and `sm:` and `lg:` add to it as the screen grows, so a card grid is `grid-cols-1 lg:grid-cols-2` and never the other way round. The shared components in `components/common` carry no breakpoints at all; they adapt because their parents do. The modal sits on the bottom edge like a sheet on a phone and centres itself on wider screens.
+Mobile first. The base classes describe the phone layout and `sm:` and `lg:` add to it as the screen grows, so a card grid is `grid-cols-1 sm:grid-cols-2 lg:grid-cols-3` and never the other way round.
+
+Three specific decisions worth naming. The header drops its labels rather than its controls as the screen narrows, so nothing becomes unreachable on a phone. Course cards are entirely clickable rather than carrying a button, which makes the target the size of the card on a small screen and keeps one tab stop per card for a keyboard. And the panel on the sign in screen is hidden below `lg` rather than stacked above the form, because on a phone it would push the password field below the fold.
+
+### Why the sign in screen is the only decorative one
+
+Everywhere else the job is information hierarchy, so ornament competes with the thing somebody came to read. The sign in screen has no information on it, which is exactly why it can carry a first impression instead.
+
+### Why there is no `tailwind.config.js`
+
+Tailwind v4 does not use one. The plugin is wired into `vite.config.js` and the theme lives in `index.css`.
+
+## Two things in the task that needed a decision
+
+The task refers to building on "your previous backend and logic work", where the previous round explicitly ruled out a backend. It also asks for a JWT authentication flow while permitting a mock API. Mocking everything satisfies both readings at once, which is what this does, and the limits of that are spelled out above rather than glossed over.
 
 ## Known limitations
 
-The isolation is client side only, so it is a boundary in the interface rather than a security one. Everything is in the browser.
+The isolation is client side only. It is a boundary in the interface, not a security one, and everything is in the browser.
 
-There is one class. Every assignment goes to every student, with no courses or sections, so a professor cannot set work for a subset of the group.
+The token is not signed and not verified, its payload can be read and edited by anyone, and the seed passwords are plaintext. This is covered in full above.
 
-A student cannot undo a submission. That is deliberate, it is what the second confirmation step warns about, but there is no way for a professor to reverse one either, which a real system would need.
+Groups cannot be formed or joined from the interface. They come from the seed data. A student in no group is shown the prompt the task asks for and nothing more, because a button that could not work would be worse than a sentence that is true.
 
-The Drive links in the sample data are made up, so opening one lands on a Google Drive error page. Links entered through the app work normally.
+Leadership cannot be transferred, so a group whose leader disappears has no way to hand in.
 
-A submission link is only checked for being a well formed http or https address. Nothing confirms it resolves, that it points at real work, or that the professor has permission to open it. A real system would at least try to fetch it, and would probably want the file itself rather than a link to it.
+An assignment can be created and edited but not deleted, and an acknowledgment cannot be withdrawn by either side.
+
+The OneDrive links in the seed data are made up, so opening one lands on an error page. Links entered through the app work normally.
+
+A submission link is only checked for being a well formed http or https address. Nothing confirms it resolves, that it points at real work, or that the professor can open it.
 
 Everything lives in one browser. Two people on two machines do not see each other's data, and clearing site data resets the app.
 
-The submission modal does not trap focus. Opening it does not move focus inside, closing it does not put focus back where it was, and tabbing walks out into the page behind. Doing this properly needs a focus trap, and a half built one is worse than none, so it is named here instead.
-
-Nothing versions the saved data. If the shape of what goes into localStorage ever changed and the app were redeployed, anyone who had used the older version would be handed data in the old shape with no way out but clearing site data. A version number checked on load, falling back to the seed when it does not match, would fix it.
-
-There are no tests. The selectors are pure functions and were checked with throwaway scripts while building, but nothing is committed that would catch a regression.
+There are no tests. The selectors are pure functions and were checked with throwaway node scripts while building, which is what the figures in this README come from, but nothing committed would catch a regression.
 
 ## What I would do with more time
 
-Put a real backend behind it and move the selectors to authenticated API calls, which is the only way the isolation becomes real.
+Put a real backend behind it and move the selectors to authenticated API calls, which is the only way any of the isolation becomes real, and verify the token signature there.
 
-Add courses, so an assignment targets a group rather than everybody, which is the single biggest gap between this and something a university could use.
+Let students form and join groups, and let a leader hand leadership on, which is the largest gap between this and something a university could actually run.
 
-Let a professor reopen a submission, since a student who confirms by mistake currently has no way out.
+Let a professor reopen an acknowledgment, since anybody who confirms by mistake currently has no way out.
 
-Add tests around `selectors.js` first, because it holds the isolation rules and it is pure, so it is both the most important and the easiest thing to cover.
+Add tests around `selectors.js` first, because it holds every access rule and it is pure, so it is both the most important file and the easiest one to cover.
 
-Add sorting and filtering on the professor's view, which matters as soon as there are more than a handful of assignments. Sorting a student's own list so unfinished work comes first would help too, since right now it is ordered by due date and the finished ones sit at the top.
-
-Give the modal a proper focus trap, and show an overdue date differently from one still to come, which is the clearest missing signal on the student's screen.
-
-Handle a file upload directly instead of pointing at a Drive folder, which would remove the need for the whole double verification flow, since the app could then see the work itself.
+Handle a file upload directly rather than pointing at a OneDrive folder, which would remove the need for the two step flow entirely, because the app could then see the work itself.
