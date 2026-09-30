@@ -40,6 +40,30 @@ export function formatDateTime(value) {
 }
 
 /*
+  A datetime-local input speaks "YYYY-MM-DDTHH:mm" in whatever timezone the reader is sitting in, while a deadline is stored as a full ISO timestamp. These two convert between the pair.
+
+  The parts are read off the local Date rather than sliced out of toISOString, because toISOString answers in UTC and would hand a professor in India a time five and a half hours away from the one they just typed.
+*/
+export function toLocalInput(value) {
+  if (!value) {
+    return ''
+  }
+
+  const when = new Date(value)
+  const pad = (number) => String(number).padStart(2, '0')
+
+  return `${when.getFullYear()}-${pad(when.getMonth() + 1)}-${pad(when.getDate())}T${pad(when.getHours())}:${pad(when.getMinutes())}`
+}
+
+export function fromLocalInput(value) {
+  if (!value) {
+    return ''
+  }
+
+  return new Date(value).toISOString()
+}
+
+/*
   Whether a deadline has gone by. Used to tell a pending assignment apart from an overdue one, which is the difference between an amber badge and a red one.
 */
 export function isPast(value) {
