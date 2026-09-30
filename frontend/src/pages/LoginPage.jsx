@@ -68,7 +68,10 @@ export default function LoginPage() {
       return
     }
 
-    toast.success(`Welcome back, ${user.name.split(' ')[0]}`)
+    /*
+      The whole name, not the first word of it. Slicing a first name off the front works until somebody is called Dr. Meera Iyer, and a name is not a thing that can be reliably taken apart.
+    */
+    toast.success(`Welcome back, ${user.name}`)
 
     navigate(location.state?.from ?? '/', { replace: true })
   }

@@ -54,8 +54,6 @@ export default function AuthLayout({ title, subtitle, children, footer }) {
             ))}
           </ul>
         </div>
-
-        <p className="text-sm opacity-70">Built for the Joineazy frontend task.</p>
       </div>
 
       <div className="flex min-h-screen items-center justify-center p-4 lg:min-h-0">

@@ -88,7 +88,7 @@ export default function RegisterPage() {
       return
     }
 
-    toast.success(`Welcome, ${user.name.split(' ')[0]}`)
+    toast.success(`Welcome, ${user.name}`)
 
     navigate('/', { replace: true })
   }
