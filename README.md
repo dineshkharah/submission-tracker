@@ -4,6 +4,10 @@ A responsive dashboard where students acknowledge that they have handed in their
 
 Live at [submission-tracker-ruby.vercel.app](https://submission-tracker-ruby.vercel.app).
 
+A three minute walkthrough of both roles is on [YouTube](https://youtu.be/mKUpOQ5KJVA), and the same recording is in this repo at [Joineazy Round 2 demo.mp4](Joineazy%20Round%202%20demo.mp4). The part worth watching for is at 0:45, where one student acknowledges a group assignment and another member of that group reads it back with the leader's name on it.
+
+The previous round's walkthrough is kept alongside it at [Joineazy Round 1 demo.mp4](Joineazy%20Round%201%20demo.mp4), for anyone who wants to see what changed.
+
 ## Running it
 
 You need Node 20.19 or newer. Everything lives in `frontend/`.
