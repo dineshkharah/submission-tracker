@@ -86,7 +86,7 @@ export default function AcknowledgeDialog({ assignment, group, memberCount }) {
         </Button>
       </DialogTrigger>
 
-      <DialogContent>
+      <DialogContent className="max-h-[90vh] overflow-y-auto">
         {step === 'link' ? (
           <form onSubmit={handleContinue} noValidate className="grid gap-4">
             <DialogHeader>
